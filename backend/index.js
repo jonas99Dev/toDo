@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv"),
   { Client } = require("pg");
+const Prometheus = require("prom-client");
 
 dotenv.config();
 
@@ -19,19 +20,41 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+const collectDefaultMetrics = Prometheus.collectDefaultMetrics;
+collectDefaultMetrics();
+
+const httpRequestCounter = new Prometheus.Counter({
+  name: "http_requests_total",
+  help: " Total numer of HTTP requests made",
+  labelNames: ["method", "route", "status"],
+});
+
+// Middleware för att räkna HTTP-förfrågningar
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    httpRequestCounter.inc({
+      method: req.method,
+      route: req.route ? req.route.path : req.path,
+      status: res.statusCode,
+    });
+  });
+  next();
+});
+
+// Exponera Prometheus metrics på en separat endpoint
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", Prometheus.register.contentType);
+  res.end(await Prometheus.register.metrics());
+});
+
 app.get("/", (req, res) => {
   res.send({ Hello: "world" });
 });
 
-// app.get("/api", async (req, res) => {
-//   const { rows } = await client.query("SELECT * FROM cities WHERE name = $1", [
-//     "Stockholm",
-//   ]);
-
 app.get("/api/todos", async (req, res) => {
   try {
     const { rows } = await client.query(
-      "SELECT * FROM todos"
+      "SELECT * FROM todos ORDER BY id ASC"
       // [req.query.title]
     );
 
@@ -56,12 +79,12 @@ app.get("/api/todos/title/:title", async (req, res) => {
   }
 });
 
-//   Endpoint för att hämta listan
+//   Endpoint för att hämta test-listan
 app.get("/doings", (req, res) => {
   res.send("doings");
 });
 
-// posta doings
+// posta todos
 app.post("/api/todos", async (req, res) => {
   try {
     const { title, description, is_completed } = req.body;
@@ -77,11 +100,6 @@ app.post("/api/todos", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-// app.post("/doings", (req, res) => {
-//   res.send("doings");
-// });
-
-// uppdatera status
 
 // ta bort uppgift
 app.delete("/api/todos/:id", async (req, res) => {
