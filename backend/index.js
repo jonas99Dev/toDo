@@ -1,3 +1,4 @@
+const path = require("path");
 const lista = require("./src/data/lista");
 const axios = require("axios");
 const express = require("express");
@@ -25,7 +26,7 @@ collectDefaultMetrics();
 
 const httpRequestCounter = new Prometheus.Counter({
   name: "http_requests_total",
-  help: " Total numer of HTTP requests made",
+  help: " Total number of HTTP requests made",
   labelNames: ["method", "route", "status"],
 });
 
@@ -47,9 +48,9 @@ app.get("/metrics", async (req, res) => {
   res.end(await Prometheus.register.metrics());
 });
 
-app.get("/", (req, res) => {
-  res.send({ Hello: "world" });
-});
+// app.get("/", (req, res) => {
+//   res.send({ Hello: "world" });
+// });
 
 app.get("/api/todos", async (req, res) => {
   try {
@@ -144,6 +145,17 @@ app.put("/api/todos/:id", async (req, res) => {
     console.error(error);
     res.status(500).send("Server error");
   }
+});
+
+app.use(express.static(path.join(path.resolve(), "dist")));
+
+app.get("/api", (req, res) => {
+  res.send({ Hello: "world" });
+});
+
+// Servera frontendens index.html som fallback
+app.get("*", (req, res) => {
+  res.sendFile(path.join(path.resolve(), "dist", "index.html"));
 });
 
 app.listen(port, () => {
