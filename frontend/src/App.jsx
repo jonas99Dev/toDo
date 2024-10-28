@@ -28,7 +28,7 @@ function App() {
 
   const fetchTodos = () => {
     axios
-      .get(`http://localhost:3000/api/todos`)
+      .get(`https://todo-cd4b.onrender.com:3000/api/todos`)
       .then((response) => {
         setTodos(response.data);
         setErrorMessage(null); // Rensa eventuella fel när hämtning lyckas
@@ -44,7 +44,7 @@ function App() {
     if (!newTodo.title) return; // Kolla att titel inte är tom
 
     axios
-      .post(`http://localhost:3000/api/todos`, newTodo)
+      .post(`https://todo-cd4b.onrender.com:3000/api/todos`, newTodo)
       .then(() => {
         setNewTodo({ title: "", description: "" });
         fetchTodos();
@@ -60,7 +60,7 @@ function App() {
   // Ta bort en todo
   const handleDeleteTodo = (id) => {
     axios
-      .delete(`http://localhost:3000/api/todos/${id}`)
+      .delete(`https://todo-cd4b.onrender.com:3000/api/todos/${id}`)
       .then(() => {
         fetchTodos();
         setSuccessMessage("Todo deleted successfully!"); // Visa framgångsmeddelande
@@ -80,7 +80,10 @@ function App() {
   // Spara en redigerad todo
   const handleSaveTodo = () => {
     axios
-      .put(`http://localhost:3000/api/todos/${editingTodo.id}`, editingTodo)
+      .put(
+        `https://todo-cd4b.onrender.com:3000/api/todos/${editingTodo.id}`,
+        editingTodo
+      )
       .then(() => {
         setEditingTodo(null);
         fetchTodos();
@@ -101,7 +104,7 @@ function App() {
   // Funktion för att hantera ändring av status för en todo
   const handleCheckboxChange = (todo) => {
     axios
-      .put(`http://localhost:3000/api/todos/${todo.id}`, {
+      .put(`https://todo-cd4b.onrender.com:3000/api/todos/${todo.id}`, {
         ...todo,
         is_completed: !todo.is_completed,
       })
