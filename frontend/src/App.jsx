@@ -20,6 +20,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null); // Ny state-variabel för framgångsmeddelanden
   const sortedTodos = [...todos].sort((a, b) => a.id - b.id);
+  const API_URL = "https://todo-cd4b.onrender.com/api";
 
   // Hämta todos från backend
   useEffect(() => {
@@ -27,8 +28,9 @@ function App() {
   }, []);
 
   const fetchTodos = () => {
+    axios;
     axios
-      .get(`https://todo-cd4b.onrender.com:3000/api/todos`)
+      .get(`${API_URL}/todos`)
       .then((response) => {
         setTodos(response.data);
         setErrorMessage(null); // Rensa eventuella fel när hämtning lyckas
@@ -43,8 +45,9 @@ function App() {
   const handleAddTodo = () => {
     if (!newTodo.title) return; // Kolla att titel inte är tom
 
+    axios;
     axios
-      .post(`https://todo-cd4b.onrender.com:3000/api/todos`, newTodo)
+      .post(`${API_URL}/todos`, newTodo)
       .then(() => {
         setNewTodo({ title: "", description: "" });
         fetchTodos();
@@ -59,8 +62,9 @@ function App() {
 
   // Ta bort en todo
   const handleDeleteTodo = (id) => {
+    axios;
     axios
-      .delete(`https://todo-cd4b.onrender.com:3000/api/todos/${id}`)
+      .delete(`${API_URL}/todos/${id}`)
       .then(() => {
         fetchTodos();
         setSuccessMessage("Todo deleted successfully!"); // Visa framgångsmeddelande
@@ -80,10 +84,8 @@ function App() {
   // Spara en redigerad todo
   const handleSaveTodo = () => {
     axios
-      .put(
-        `https://todo-cd4b.onrender.com:3000/api/todos/${editingTodo.id}`,
-        editingTodo
-      )
+      .put(`${API_URL}/todos/${editingTodo.id}`, editingTodo)
+
       .then(() => {
         setEditingTodo(null);
         fetchTodos();
@@ -104,7 +106,7 @@ function App() {
   // Funktion för att hantera ändring av status för en todo
   const handleCheckboxChange = (todo) => {
     axios
-      .put(`https://todo-cd4b.onrender.com:3000/api/todos/${todo.id}`, {
+      .put(`${API_URL}/todos/${todo.id}`, {
         ...todo,
         is_completed: !todo.is_completed,
       })
