@@ -12,14 +12,18 @@ import {
   Alert,
 } from "@mui/material";
 import { Delete, Edit, Save, Cancel } from "@mui/icons-material";
+import { Todo } from "./types";
 
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState({ title: "", description: "" });
-  const [editingTodo, setEditingTodo] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null); // Ny state-variabel för framgångsmeddelanden
-  const sortedTodos = [...todos].sort((a, b) => a.id - b.id);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [newTodo, setNewTodo] = useState<Partial<Todo>>({
+    title: "",
+    description: "",
+  });
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); // Ny state-variabel för framgångsmeddelanden
+  const sortedTodos: Todo[] = [...todos].sort((a, b) => a.id - b.id);
   const API_URL = "https://todo-cd4b.onrender.com/api";
 
   // Hämta todos från backend
@@ -27,10 +31,9 @@ function App() {
     fetchTodos();
   }, []);
 
-  const fetchTodos = () => {
-    axios;
+  const fetchTodos = (): void => {
     axios
-      .get(`${API_URL}/todos`)
+      .get<Todo[]>(`${API_URL}/todos`)
       .then((response) => {
         setTodos(response.data);
         setErrorMessage(null); // Rensa eventuella fel när hämtning lyckas
@@ -42,12 +45,12 @@ function App() {
   };
 
   // Lägg till en ny todo
-  const handleAddTodo = () => {
+  const handleAddTodo = (): void => {
     if (!newTodo.title) return; // Kolla att titel inte är tom
 
     axios;
     axios
-      .post(`${API_URL}/todos`, newTodo)
+      .post<Todo>(`${API_URL}/todos`, newTodo)
       .then(() => {
         setNewTodo({ title: "", description: "" });
         fetchTodos();
@@ -61,7 +64,7 @@ function App() {
   };
 
   // Ta bort en todo
-  const handleDeleteTodo = (id) => {
+  const handleDeleteTodo = (id: number): void => {
     axios;
     axios
       .delete(`${API_URL}/todos/${id}`)
@@ -77,14 +80,16 @@ function App() {
   };
 
   // Börja redigera en todo
-  const handleEditTodo = (todo) => {
+  const handleEditTodo = (todo: Todo): void => {
     setEditingTodo({ ...todo });
   };
 
   // Spara en redigerad todo
   const handleSaveTodo = () => {
+    if (!editingTodo) return;
+
     axios
-      .put(`${API_URL}/todos/${editingTodo.id}`, editingTodo)
+      .put<Todo>(`${API_URL}/todos/${editingTodo.id}`, editingTodo)
 
       .then(() => {
         setEditingTodo(null);
@@ -104,7 +109,11 @@ function App() {
   };
 
   // Funktion för att hantera ändring av status för en todo
-  const handleCheckboxChange = (todo) => {
+  const handleCheckboxChange = (todo: Todo): void => {
+    const updatedTodo = { ...todo, is_completed: !todo.is_completed };
+    setTodos((prevTodos) =>
+      prevTodos.map((t) => (t.id === todo.id ? updatedTodo : t))
+    );
     axios
       .put(`${API_URL}/todos/${todo.id}`, {
         ...todo,

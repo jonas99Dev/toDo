@@ -1,24 +1,27 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
+import { Todo, NewTodo, TodoFormProps } from "../types";
 
-const TodoForm = ({ existingTodo, onSave }) => {
-  const [title, setTitle] = useState(existingTodo ? existingTodo.title : "");
-  const [description, setDescription] = useState(
-    existingTodo ? existingTodo.description : ""
+const TodoForm: React.FC<TodoFormProps> = ({ existingTodo, onSave }) => {
+  const [title, setTitle] = useState<string>(
+    existingTodo ? existingTodo.title : ""
+  );
+  const [description, setDescription] = useState<string>(
+    existingTodo?.description || ""
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const newTodo = { title, description };
     if (existingTodo) {
       axios
-        .put(`/api/todos/${existingTodo.id}`, newTodo)
+        .put<Todo>(`/api/todos/${existingTodo.id}`, newTodo)
         .then((response) => onSave(response.data))
         .catch((error) => console.error("Error updating todo:", error));
     } else {
       axios
-        .post("/api/todos", newTodo)
+        .post<Todo>("/api/todos", newTodo)
         .then((response) => onSave(response.data))
         .catch((error) => console.error("Error creating todo:", error));
     }
@@ -42,13 +45,13 @@ const TodoForm = ({ existingTodo, onSave }) => {
   );
 };
 
-TodoForm.propTypes = {
-  existingTodo: PropTypes.shape({
-    id: PropTypes.number,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-  }),
-  onSave: PropTypes.func.isRequired,
-};
+// TodoForm.propTypes = {
+//   existingTodo: PropTypes.shape({
+//     id: PropTypes.number,
+//     title: PropTypes.string.isRequired,
+//     description: PropTypes.string,
+//   }),
+//   onSave: PropTypes.func.isRequired,
+// };
 
 export default TodoForm;

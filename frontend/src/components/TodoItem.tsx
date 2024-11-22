@@ -1,7 +1,8 @@
 // import React from "react";
 import PropTypes from "prop-types";
+import { Todo, TodoItemProps } from "../../src/types";
 
-const TodoItem = ({ todo }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   return (
     <div>
       <h2>{todo.title}</h2>
@@ -13,13 +14,13 @@ const TodoItem = ({ todo }) => {
 };
 
 // PropTypes för att validera props som skickas till komponenten
-TodoItem.propTypes = {
-  todo: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    is_completed: PropTypes.bool.isRequired,
-  }).isRequired,
-};
+// TodoItem.propTypes = {
+//   todo: PropTypes.shape({
+//     id: PropTypes.number.isRequired,
+//     title: PropTypes.string.isRequired,
+//     description: PropTypes.string,
+//     is_completed: PropTypes.bool.isRequired,
+//   }).isRequired,
+// };
 
 export default TodoItem;
