@@ -45,6 +45,10 @@ const TodoForm: React.FC<TodoFormProps> = ({ existingTodo, onSave }) => {
   );
 };
 
+export default TodoForm;
+
+// kod som tidigare använts
+
 // TodoForm.propTypes = {
 //   existingTodo: PropTypes.shape({
 //     id: PropTypes.number,
@@ -53,5 +57,3 @@ const TodoForm: React.FC<TodoFormProps> = ({ existingTodo, onSave }) => {
 //   }),
 //   onSave: PropTypes.func.isRequired,
 // };
-
-export default TodoForm;

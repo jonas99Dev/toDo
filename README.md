@@ -1,6 +1,7 @@
 # ToDo-applikation
 
 Det här är min fullstack-applikation jag tidigare gjort i javascript men konverterat till TypeScript. Den hanterar en enkel ToDo-lista och är gjord för att visa hur frontend, backend och en databas kan samverka. Jag har använt React för frontend, Express för backend och PostgreSQL som databas.
+Material UI används för en enkel styling.
 
 ---
 
@@ -34,8 +35,6 @@ Det här är min fullstack-applikation jag tidigare gjort i javascript men konve
 
 ## Installation och körning
 
-1. **Klona projektet**
-   ```bash
-   git clone <repository-url>
-   cd backend
-   ```
+gå in i backend och kör npm run dev sedan öpnnar du localhost:3000 i browsern.
+
+Det var en rolig utmaning att göra om projektet till typescript.

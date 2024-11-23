@@ -13,14 +13,4 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   );
 };
 
-// PropTypes för att validera props som skickas till komponenten
-// TodoItem.propTypes = {
-//   todo: PropTypes.shape({
-//     id: PropTypes.number.isRequired,
-//     title: PropTypes.string.isRequired,
-//     description: PropTypes.string,
-//     is_completed: PropTypes.bool.isRequired,
-//   }).isRequired,
-// };
-
 export default TodoItem;
