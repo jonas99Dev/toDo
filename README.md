@@ -1,26 +1,40 @@
-adress till projektet:
-https://todo-cd4b.onrender.com/
+# ToDo-applikation
 
-testade lite monitorering:
-https://todo-cd4b.onrender.com/metrics
+Det här är min fullstack-applikation jag tidigare gjort i javascript men konverterat till TypeScript. Den hanterar en enkel ToDo-lista och är gjord för att visa hur frontend, backend och en databas kan samverka. Jag har använt React för frontend, Express för backend och PostgreSQL som databas.
+Material UI används för en enkel styling.
 
-adress till github:
-https://github.com/jonas99Dev/toDo.git
+---
 
-Continous Deployment:
+## Funktioner
 
-Istället för att behöva göra manuella uppdateringar varje gång, görs det automatiska uppateringar vid varje push.
-Genom att exv. GitHub anropar en speciell webbadress (en Deploy Hook). Render behöver åtkomst till GitHub-kontot för att kunna utföra en deploy.
+### Frontend
 
-jag har lagt in en sådan i mitt repo på github.
+- Hämtar data från backend och visar en lista med ToDos.
+- Möjlighet att lägga till, redigera, ta bort och markera uppgifter som klara.
+- Byggt med React, och gränssnittet är stylat med Material UI.
 
-Content Delivery Network (CDN)
+### Backend
 
-Tekniken bygger på att static sites har kopior av webbplatsfilerna på flera ställen i världen. Det gör att latencyn blir lägre, eftersom det geografiska avståndet blir kortare, och det finns redundans, om en server sklulle gå offline.
-Exempelvis använder Amazon, Netflix, Render och GitHub-pages den här tekniken.
+- En REST API byggt med Express.
+- Hanterar CRUD-operationer:
+  - **GET** för att läsa ToDos.
+  - **POST** för att lägga till nya.
+  - **PUT** för att uppdatera befintliga.
+  - **DELETE** för att ta bort.
+- Kommunicerar med PostgreSQL-databasen.
 
-Fyra viktiga aspekter:
-1 - kortare laddningstider. Besökare är mindre benägna att lämna sajten.
-2 - lägre bandbredds-kostnader, genom bättre användning av cache och optimering.
-3 - ökad stabilitet och redundans
-4 - Ökad säkerhet
+### Databas
+
+- Tabellen `todos` har:
+  - `id`: Primärnyckel.
+  - `title`: Titel för uppgiften.
+  - `description`: En valfri beskrivning.
+  - `is_completed`: Boolean för status (klar/ej klar).
+
+---
+
+## Installation och körning
+
+gå in i backend och kör npm run dev sedan öpnnar du localhost:3000 i browsern.
+
+Det var en rolig utmaning att göra om projektet till typescript.
